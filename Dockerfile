@@ -1,22 +1,17 @@
-# Use Python 3.9 as base image
-FROM python:3.9-slim
+# Use Node.js 18 as base image
+FROM node:18-slim
 
-# Install system dependencies
+# Install Python and system dependencies
 RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
     libgl1-mesa-dri \
     libglib2.0-0 \
     libsm6 \
     libxext6 \
     libxrender1 \
     libgomp1 \
-    libgcc-s1 \
-    libglib2.0-0 \
-    libgthread-2.0-0 \
     && rm -rf /var/lib/apt/lists/*
-
-# Install Node.js
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get install -y nodejs
 
 # Set working directory
 WORKDIR /app
@@ -26,7 +21,7 @@ COPY package*.json ./
 COPY requirements.txt ./
 
 # Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Install Node.js dependencies
 RUN npm install
