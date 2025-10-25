@@ -9,10 +9,11 @@ export interface PythonResult {
 
 export async function runPythonCommand(
   args: string[],
-  cwd?: string
+  cwd?: string,
+  pythonPath: string = 'python'
 ): Promise<PythonResult> {
   return new Promise((resolve) => {
-    const python = spawn('python', args, {
+    const python = spawn(pythonPath, args, {
       cwd: cwd || process.cwd(),
       stdio: ['pipe', 'pipe', 'pipe'],
     })

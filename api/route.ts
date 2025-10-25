@@ -6,6 +6,7 @@ import { existsSync } from "fs"
 
 export async function POST(request: NextRequest) {
   try {
+        const pythonPath = process.env.PYTHON_PATH || 'python'
     const formData = await request.formData()
     const file = formData.get("file") as File
     const type = formData.get("type") as string // "image" or "video"
@@ -129,9 +130,9 @@ if __name__ == "__main__":
       await writeFile(scriptPath, threatDetectionScript)
 
       // Run the YOLO detection script
-      const pythonResult = await runPythonCommand([
+            const pythonResult = await runPythonCommand([
         scriptPath
-      ], tempDir)
+      ], tempDir, pythonPath)
 
       if (pythonResult.code !== 0) {
         console.error("Python error:", pythonResult.stderr)
@@ -371,9 +372,9 @@ if __name__ == "__main__":
       await writeFile(videoScriptPath, videoThreatDetectionScript)
 
       // Run video detection
-      const pythonResult = await runPythonCommand([
+            const pythonResult = await runPythonCommand([
         videoScriptPath
-      ], tempDir)
+      ], tempDir, pythonPath)
 
       if (pythonResult.code !== 0) {
         console.error("Python error:", pythonResult.stderr)
