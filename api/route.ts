@@ -6,7 +6,9 @@ import { existsSync } from "fs"
 
 export async function POST(request: NextRequest) {
   try {
-        const pythonPath = process.env.PYTHON_PATH || 'python'
+            const pythonPath = process.env.PYTHON_PATH || 'python'
+    const modelPath = process.env.MODEL_PATH || 'best.pt'
+    const confidenceThreshold = parseFloat(process.env.CONFIDENCE_THRESHOLD || '0.3')
     const formData = await request.formData()
     const file = formData.get("file") as File
     const type = formData.get("type") as string // "image" or "video"
@@ -63,13 +65,14 @@ def run_threat_detection(input_path, output_path):
             return None
         
         # Initialize threat detector with the model from detection folder
-        model_path = os.path.join(detection_dir, "best.pt")
-        
+        model_path = r'${modelPath.replace(/\\/g, "\\\\")}'
+        confidence_threshold = ${confidenceThreshold}
+
         if not os.path.exists(model_path):
             return None
         
-        # Initialize detector with lower confidence threshold for better detection
-        detector = ThreatDetector(model_path=model_path, confidence_threshold=0.3, verbose=False)
+        # Initialize detector with settings from environment variables
+        detector = ThreatDetector(model_path=model_path, confidence_threshold=confidence_threshold, verbose=False)
         
         if not detector.model:
                         return None
@@ -236,15 +239,16 @@ def run_video_threat_detection(input_path, output_path):
             return None
         
         # Initialize threat detector with the model from detection folder
-        model_path = os.path.join(detection_dir, "best.pt")
+        model_path = r'${modelPath.replace(/\\/g, "\\\\")}'
+        confidence_threshold = ${confidenceThreshold}
         print(f"Looking for model at: {model_path}")
-        
+
         if not os.path.exists(model_path):
             print(f"Model not found at: {model_path}")
             return None
-            
-        # Initialize detector with lower confidence threshold for better detection
-        detector = ThreatDetector(model_path=model_path, confidence_threshold=0.3, verbose=False)
+
+        # Initialize detector with settings from environment variables
+        detector = ThreatDetector(model_path=model_path, confidence_threshold=confidence_threshold, verbose=False)
         
         if not detector.model:
             print("Failed to load threat detector model")

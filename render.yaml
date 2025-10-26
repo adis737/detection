@@ -1,15 +1,20 @@
 services:
   - type: web
     name: threat-detection-app
-    env: node
+    env: docker
     plan: starter
-    buildCommand: npm install && npm run build
-    startCommand: npm start
+    dockerfilePath: ./Dockerfile
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
         value: 10000
+      - key: PYTHON_PATH
+        value: python3
+      - key: MODEL_PATH
+        value: best.pt
+      - key: CONFIDENCE_THRESHOLD
+        value: 0.2
     healthCheckPath: /
     autoDeploy: true
     branch: main
