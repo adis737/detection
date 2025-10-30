@@ -5,6 +5,7 @@ FROM node:18-slim
 RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
+    libgl1 \
     libgl1-mesa-dri \
     libglib2.0-0 \
     libsm6 \
