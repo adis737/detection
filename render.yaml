@@ -7,8 +7,6 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 10000
       - key: PYTHON_PATH
         value: python3
       - key: MODEL_PATH
